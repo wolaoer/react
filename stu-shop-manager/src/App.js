@@ -18,6 +18,7 @@ function App() {
                     return <route.component {...routeProps} />
                 }} />
             })}
+            <Redirect to={adminRoutes[0].path} from="/admin" />
             <Redirect to="/404" />
         </Switch>
     </Frame>

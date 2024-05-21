@@ -1,8 +1,10 @@
 import React from 'react';
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
+import { LaptopOutlined, NotificationOutlined, UserOutlined, SettingOutlined } from '@ant-design/icons';
+
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import {adminRoutes} from "../../routes";
 import {withRouter} from "react-router-dom";
+import SubMenu from "antd/es/menu/SubMenu";
 
 const { Header, Content, Sider } = Layout;
 const items1 = ['1', '2', '3'].map((key) => ({
@@ -45,6 +47,21 @@ function Index(props) {
                             borderRight: 0,
                         }}>
                         {routes.map((route) => {
+                            if (route.subRoutes) {
+                                return (
+                                    <SubMenu key={route.path} icon={<SettingOutlined />} title={route.title}>
+                                        {route.subRoutes.map(subRoute => (
+                                            <Menu.Item key={subRoute.path} onClick={p => {
+                                                console.log(p.key);
+                                                props.history.push(p.key);
+
+                                            }}>
+                                                {subRoute.title}
+                                            </Menu.Item>
+                                        ))}
+                                    </SubMenu>
+                                );
+                            }
                             return (
                                 <Menu.Item key={route.path} onClick={p=>props.history.push(p.key)}>
                                     {route.title}
@@ -58,15 +75,6 @@ function Index(props) {
                         padding: '16px',
                     }}
                 >
-                    {/*<Breadcrumb*/}
-                    {/*    style={{*/}
-                    {/*        margin: '16px 0',*/}
-                    {/*    }}*/}
-                    {/*>*/}
-                    {/*    <Breadcrumb.Item>Home</Breadcrumb.Item>*/}
-                    {/*    <Breadcrumb.Item>List</Breadcrumb.Item>*/}
-                    {/*    <Breadcrumb.Item>App</Breadcrumb.Item>*/}
-                    {/*</Breadcrumb>*/}
                     <Content
                         style={{
                             padding: 24,
