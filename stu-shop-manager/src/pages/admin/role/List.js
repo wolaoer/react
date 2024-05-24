@@ -1,35 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Table, Button, Popconfirm, Switch, Input, Form } from 'antd';
 
-const initialData = [
-    {
-        key: '1',
-        number: '1',
-        roleName: '商品管理员',
-        description: '只能查看及操作商品',
-        userCount: 0,
-        createdAt: '2020-02-03 16:50:37',
-        enabled: true,
-    },
-    {
-        key: '2',
-        number: '2',
-        roleName: '订单管理员',
-        description: '只能查看及操作订单',
-        userCount: 0,
-        createdAt: '2018-09-30 15:53:45',
-        enabled: true,
-    },
-    {
-        key: '5',
-        number: '5',
-        roleName: '超级管理员',
-        description: '拥有所有查看和操作功能',
-        userCount: 0,
-        createdAt: '2020-02-02 15:11:05',
-        enabled: true,
-    },
-];
+const initialData = JSON.parse(localStorage.getItem('roleData'));
 
 const columns = [
     {

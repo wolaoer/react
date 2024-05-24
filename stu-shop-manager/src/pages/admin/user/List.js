@@ -1,48 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Table, Button, Popconfirm, Switch, Input, Form } from 'antd';
 
-const initialData = [
-    {
-        key: '1',
-        number: '1',
-        account: 'test',
-        name: '测试账号',
-        email: 'test@qq.com',
-        createdAt: '2018-09-29 13:55:30',
-        lastLogin: '2018-09-29 13:55:39',
-        enabled: true,
-    },
-    {
-        key: '3',
-        number: '3',
-        account: 'admin',
-        name: '系统管理员',
-        email: 'admin@163.com',
-        createdAt: '2018-10-08 13:32:47',
-        lastLogin: '2019-04-20 12:45:16',
-        enabled: true,
-    },
-    {
-        key: '4',
-        number: '4',
-        account: 'macro',
-        name: 'macro',
-        email: 'macro@qq.com',
-        createdAt: '2019-10-06 15:53:51',
-        lastLogin: '2020-02-03 14:55:55',
-        enabled: true,
-    },
-    {
-        key: '6',
-        number: '6',
-        account: 'productAdmin',
-        name: '商品管理员',
-        email: 'product@qq.com',
-        createdAt: '2020-02-07 16:15:08',
-        lastLogin: 'N/A',
-        enabled: true,
-    },
-];
+const initialData = JSON.parse(localStorage.getItem('userData'));
 
 const columns = [
     {
