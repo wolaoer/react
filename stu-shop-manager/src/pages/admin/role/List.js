@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Form, Input, Modal, Popconfirm, Switch, Table, Tree} from 'antd';
+import {Button, Card, Form, Input, message, Modal, Popconfirm, Switch, Table, Tree} from 'antd';
 
 const initialData = JSON.parse(localStorage.getItem('roleData'));
 const columns = (handleDelete, handleSwitchChange, handleAssign, handleEdit)=>[
@@ -83,7 +83,7 @@ function RoleManagement() {
 
     const handleReset = () => {
         setSearchText('');
-        setData(data);
+        setData(JSON.parse(localStorage.getItem('roleData')));
     };
 
     const handleSwitchChange = (key, checked) => {
@@ -109,7 +109,27 @@ function RoleManagement() {
 
     const handleAssign = (key) => {
         setCurrentRole(key);
+
+        const current = data.find(item => item.key === key);
+        if(current.permission.length > 0) {
+            setSelectedKeys(getAllKeys(current.permission));
+        }
+
         setIsAssignModalVisible(true);
+    };
+
+// 递归获取所有的key，包括子菜单的key
+    const getAllKeys = (menuItems) => {
+        let keys = [];
+        for (let item of menuItems) {
+            if(!item.subMenu){
+                keys.push(item.key);
+            }
+            if (item.subMenu) {
+                keys = [...keys, ...getAllKeys(item.subMenu)];
+            }
+        }
+        return keys;
     };
 
     const handleEdit = (key) => {
@@ -120,39 +140,41 @@ function RoleManagement() {
         setIsAddModalVisible(true);
     };
     const handleAssignOk = () => {
-        // 获取选中的菜单项
-        const getSelectedMenuItems = (keys, menu) => {
-            return menu.reduce((acc, item) => {
-                if (keys.includes(item.key)) {
-                    acc.push(item);
-                } else if (item.subMenu) {
-                    const subItems = getSelectedMenuItems(keys, item.subMenu);
-                    if (subItems.length > 0) {
-                        acc.push({ ...item, subMenu: subItems });
+        //获取菜单数据
+        const menuData = JSON.parse(localStorage.getItem('menuData'));
+        //获取当前角色
+        const current = data.find(item => item.key === currentRole);
+        //获取selectedKeys
+        current.permission = menuData.reduce((acc, item) => {
+            if (selectedKeys.includes(item.key)) {
+                // console.log('item', item);
+                acc.push(item);
+            } else if (item.subMenu) {
+                const subItems = item.subMenu.reduce((subAcc, subItem) => {
+                    if (selectedKeys.includes(subItem.key)) {
+                        // console.log('subItem', subItem);
+                        subAcc.push(subItem);
                     }
+                    return subAcc;
+                }, []);
+                if (subItems.length > 0) {
+                    acc.push({...item, subMenu: subItems});
                 }
-                return acc;
-            }, []);
-        };
-
-        const selectedMenuData = getSelectedMenuItems(selectedKeys, menuData);
-
-        // 更新当前角色的权限
+            }
+            return acc;
+        }, []);
+        // console.log('current', current);
         const newData = data.map(item => {
             if (item.key === currentRole) {
-                return { ...item, permission: selectedMenuData }; // 将选中的菜单数据赋值给当前角色的permission字段
+                return current;
             }
             return item;
         });
-
-        // 保存更新后的数据到localStorage并更新状态
         setData(newData);
         localStorage.setItem('roleData', JSON.stringify(newData));
-        console.log('newData', newData);
-        console.log('selectedKeys', selectedKeys);
-        // 关闭Modal
         setIsAssignModalVisible(false);
-    };
+        message.success('分配菜单成功');
+    }
 
     const handleAssignCancel = () => {
         setIsAssignModalVisible(false);
@@ -161,10 +183,13 @@ function RoleManagement() {
     const handleEditOk = () => {
         // 保存编辑
         setIsEditModalVisible(false);
+        //将数据写入到localStorage
+
     };
 
     const handleEditCancel = () => {
         setIsEditModalVisible(false);
+        //清空输入框
     };
 
     const handleAddOk = () => {
@@ -175,6 +200,7 @@ function RoleManagement() {
 
     const handleAddCancel = () => {
         setIsAddModalVisible(false);
+        //清空输入框
     };
     return (
         <Card>
