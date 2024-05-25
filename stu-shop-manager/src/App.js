@@ -91,6 +91,7 @@ const roleData = [
         userCount: 0,
         createdAt: '2020-02-03 16:50:37',
         enabled: true,
+        permission:[],
     },
     {
         key: '2',
@@ -100,6 +101,7 @@ const roleData = [
         userCount: 0,
         createdAt: '2018-09-30 15:53:45',
         enabled: true,
+        permission: [],
     },
     {
         key: '5',
@@ -109,6 +111,7 @@ const roleData = [
         userCount: 0,
         createdAt: '2020-02-02 15:11:05',
         enabled: true,
+        permission: [],
     },
 ];
 const userData = [
