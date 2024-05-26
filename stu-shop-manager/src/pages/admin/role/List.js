@@ -63,8 +63,30 @@ function RoleManagement() {
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState([]);
-    const [currentRole, setCurrentRole] = useState(null);
+    const [currentRole, setCurrentRole] = useState({
+        key:'',
+        number: '',
+        roleName: '',
+        description: '',
+        userCount: 0,
+        enabled: true,
+        permission: [],
+        createdAt: '2018-09-30 15:53:45',
+
+    });
     const [menuData, setMenuData] = useState([]);
+    const [newRole, setNewRole] = useState({
+        key:'',
+        number: '',
+        roleName: '',
+        description: '',
+        userCount: 0,
+        enabled: true,
+        permission: [],
+        createdAt: '2018-09-30 15:53:45',
+    });
+
+
 
     useEffect(() => {
         const storedData = JSON.parse(localStorage.getItem('roleData')) || [];
@@ -133,7 +155,8 @@ function RoleManagement() {
     };
 
     const handleEdit = (key) => {
-        setCurrentRole(key);
+        const current = data.find(item => item.key === key);
+        setCurrentRole(current);  // 存储当前角色对象
         setIsEditModalVisible(true);
     };
     const handleAdd = () => {
@@ -181,21 +204,41 @@ function RoleManagement() {
     };
 
     const handleEditOk = () => {
-        // 保存编辑
+        const newData = data.map(item => {
+            if (item.key === currentRole.key) {
+                return {
+                    ...item,
+                    roleName: currentRole.roleName,  // 使用表单中的新值
+                    description: currentRole.description
+                };
+            }
+            return item;
+        });
+        setData(newData);
+        localStorage.setItem('roleData', JSON.stringify(newData));
         setIsEditModalVisible(false);
-        //将数据写入到localStorage
-
+        message.success('角色信息已更新');
     };
 
     const handleEditCancel = () => {
         setIsEditModalVisible(false);
         //清空输入框
+
     };
 
     const handleAddOk = () => {
-        // 保存新建
+        const newRoleData = {
+            ...newRole,
+            key: Date.now(),  // 使用时间戳作为唯一键
+            enabled: true,   // 默认启用状态
+            createdAt: new Date().toISOString()  // 添加时间
+        };
+        const newData = [...data, newRoleData];
+        setData(newData);
+        localStorage.setItem('roleData', JSON.stringify(newData));
         setIsAddModalVisible(false);
-
+        message.success('新角色已添加');
+        setNewRole({number: '', roleName: '', description: ''});  // 重置表单
     };
 
     const handleAddCancel = () => {
@@ -252,10 +295,10 @@ function RoleManagement() {
             >
                 <Form layout="vertical">
                     <Form.Item label="角色名称">
-                        <Input />
+                        <Input value={currentRole.roleName} onChange={e => setCurrentRole({...currentRole, roleName: e.target.value})} />
                     </Form.Item>
                     <Form.Item label="描述">
-                        <Input />
+                        <Input value={currentRole.description} onChange={e => setCurrentRole({...currentRole, description: e.target.value})} />
                     </Form.Item>
                 </Form>
             </Modal>
@@ -269,13 +312,22 @@ function RoleManagement() {
             >
                 <Form layout="vertical">
                     <Form.Item label="编号">
-                        <Input />
+                        <Input
+                            value={newRole.number}
+                            onChange={e => setNewRole({...newRole, number: e.target.value})}
+                        />
                     </Form.Item>
                     <Form.Item label="角色名称">
-                        <Input />
+                        <Input
+                            value={newRole.roleName}
+                            onChange={e => setNewRole({...newRole, roleName: e.target.value})}
+                        />
                     </Form.Item>
                     <Form.Item label="描述">
-                        <Input />
+                        <Input
+                            value={newRole.description}
+                            onChange={e => setNewRole({...newRole, description: e.target.value})}
+                        />
                     </Form.Item>
                 </Form>
             </Modal>

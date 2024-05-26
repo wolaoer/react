@@ -1,101 +1,6 @@
-// import React from 'react';
-// import { LaptopOutlined, NotificationOutlined, UserOutlined, SettingOutlined } from '@ant-design/icons';
-//
-// import { Breadcrumb, Layout, Menu, theme } from 'antd';
-// import {adminRoutes} from "../../routes";
-// import {withRouter} from "react-router-dom";
-// import SubMenu from "antd/es/menu/SubMenu";
-//
-// const { Header, Content, Sider } = Layout;
-// const items1 = ['1', '2', '3'].map((key) => ({
-//     key,
-//     label: `nav ${key}`,
-// }));
-// const routes = adminRoutes.filter((route) => route.isShow === true);
-// function Index(props) {
-//     const {
-//         token: { colorBgContainer, borderRadiusLG },
-//     } = theme.useToken();
-//     return (
-//         <Layout>
-//             <Header
-//                 style={{
-//                     display: 'flex',
-//                     alignItems: 'center',
-//                 }}
-//             >
-//                 <div className="demo-logo" style={{
-//                     color:"white",
-//                 }}>
-//                     信息管理系统
-//                 </div>
-//
-//             </Header>
-//             <Layout>
-//                 <Sider
-//                     width={200}
-//                     style={{
-//                         background: colorBgContainer,
-//                     }}
-//                 >
-//                     <Menu
-//                         mode="inline"
-//                         defaultSelectedKeys={['1']}
-//                         defaultOpenKeys={['sub1']}
-//                         style={{
-//                             height: '100%',
-//                             borderRight: 0,
-//                         }}>
-//                         {routes.map((route) => {
-//                             if (route.subRoutes) {
-//                                 return (
-//                                     <SubMenu key={route.path} icon={<SettingOutlined />} title={route.title}>
-//                                         {route.subRoutes.map(subRoute => (
-//                                             <Menu.Item key={subRoute.path} onClick={p => {
-//                                                 console.log(p.key);
-//                                                 props.history.push(p.key);
-//
-//                                             }}>
-//                                                 {subRoute.title}
-//                                             </Menu.Item>
-//                                         ))}
-//                                     </SubMenu>
-//                                 );
-//                             }
-//                             return (
-//                                 <Menu.Item key={route.path} onClick={p=>props.history.push(p.key)}>
-//                                     {route.title}
-//                                 </Menu.Item>
-//                             );
-//                         })}
-//                     </Menu>
-//                 </Sider>
-//                 <Layout
-//                     style={{
-//                         padding: '16px',
-//                     }}
-//                 >
-//                     <Content
-//                         style={{
-//                             padding: 24,
-//                             margin: 0,
-//                             minHeight: 280,
-//                             background: colorBgContainer,
-//                             borderRadius: borderRadiusLG,
-//                         }}
-//                     >
-//                         {props.children}
-//                     </Content>
-//                 </Layout>
-//             </Layout>
-//         </Layout>
-//     );
-// }
-// export default withRouter(Index);
-
 import React, { useEffect, useState } from 'react';
-import { SettingOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
+import { SettingOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Layout, Menu, theme, Dropdown, Button, Space } from 'antd';
 import { withRouter } from 'react-router-dom';
 import SubMenu from 'antd/es/menu/SubMenu';
 
@@ -107,6 +12,7 @@ function Index(props) {
     } = theme.useToken();
 
     const [menuData, setMenuData] = useState([]);
+    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser'))); // 示例用户数据
 
     useEffect(() => {
         const fetchMenuData = () => {
@@ -125,9 +31,17 @@ function Index(props) {
         return () => clearInterval(interval);
     }, []);
 
+    const handleLogout = () => {
+        // 处理退出逻辑
+        console.log('用户已退出');
+        // 重定向到登录页
+        props.history.push('/login');
+        localStorage.removeItem('isLoggedIn');
+    };
+
     const generateMenuItems = (data) => {
         return data.map((item) => {
-            if(!item.visible) return null;
+            if (!item.visible) return null;
             if (item.subMenu && item.subMenu.length > 0) {
                 return (
                     <SubMenu key={item.key} icon={<SettingOutlined />} title={item.menuName}>
@@ -143,17 +57,37 @@ function Index(props) {
         });
     };
 
+    const userMenu = (
+        <Menu>
+            <Menu.Item key="profile" icon={<UserOutlined />}>
+                个人资料
+            </Menu.Item>
+            <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={handleLogout}>
+                退出
+            </Menu.Item>
+        </Menu>
+    );
+
     return (
         <Layout>
             <Header
                 style={{
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'space-between',
                 }}
             >
-                <div className="demo-logo" style={{ color: "white" }}>
+                <div className="demo-logo" style={{ color: "white", fontSize: '24px', fontWeight: 'bold' }}>
                     信息管理系统
                 </div>
+                <Dropdown overlay={userMenu}>
+                    <Button type="link" style={{ color: 'white' }}>
+                        <Space>
+                            {currentUser.email}
+                            <UserOutlined />
+                        </Space>
+                    </Button>
+                </Dropdown>
             </Header>
             <Layout>
                 <Sider
@@ -187,4 +121,3 @@ function Index(props) {
 }
 
 export default withRouter(Index);
-
