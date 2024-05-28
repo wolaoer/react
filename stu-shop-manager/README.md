@@ -1,70 +1,73 @@
-# Getting Started with Create React App
+# README
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 项目名称: stu-shop-manager
 
-## Available Scripts
+stu-shop-manager 是一个基于 React 和 Ant Design 的信息管理系统。它包括用户管理、角色管理、菜单管理等功能。
 
-In the project directory, you can run:
+## 项目目录结构
 
-### `npm start`
+```
+stu-shop-manager
+├── src
+│   ├── pages
+│   │   ├── admin
+│   │   │   ├── dashboard
+│   │   │   ├── menu
+│   │   │   ├── role
+│   │   │   └── user
+│   │   ├── Login.js
+│   │   ├── LoginForm.js
+│   │   └── RegisterForm.js
+│   ├── routes
+│   │   └── index.js
+│   ├── App.js
+│   └── index.js
+├── package.json
+└── README.md
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 使用的插件
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- `React`: 用于构建用户界面的 JavaScript 库。
+- `Ant Design`: 一个服务于企业级产品的设计体系。
+- `axios`: 用于浏览器和 node.js 的基于 Promise 的 HTTP 客户端。
+- `CryptoJS`: 用于 JavaScript 的加密标准库。
 
-### `npm test`
+## 组件使用说明
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `LoginForm.js`: 登录表单组件，包含邮箱和密码输入框，以及登录按钮。
+- `RegisterForm.js`: 注册表单组件，包含邮箱和密码输入框，以及注册按钮。
+- `admin/menu`: 菜单管理组件，包含菜单的添加、编辑、删除等功能。
+- `admin/role`: 角色管理组件，包含角色的添加、编辑、删除等功能。
+- `admin/user`: 用户管理组件，包含用户的添加、编辑、删除等功能。
 
-### `npm run build`
+## 项目运行启动方式
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. 克隆项目到本地
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+git clone https://github.com/wolaoer/react.git
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. 进入项目目录
 
-### `npm run eject`
+```bash
+cd stu-shop-manager
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. 安装依赖
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. 启动项目
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm start
+```
 
-## Learn More
+在浏览器中访问 `http://localhost:3000` 来查看项目。
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+登录test@qq.com进行权限的控制 （不用输入密码，已经自动生成）
+给其他用户分配角色后  退出 登录指定角色后 只拥有对应权限
